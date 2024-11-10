@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoice-generator-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: invoice-generator
+  template:
+    metadata:
+      labels:
+        app: invoice-generator
+    spec:
+      containers:
+      - name: invoice-generator
+        image: jiwans0za/invoice-generator:latest
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: invoice-generator-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: invoice-generator
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
